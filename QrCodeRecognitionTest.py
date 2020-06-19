@@ -8,6 +8,8 @@ if len(sys.argv)>1:
 else:
     inputImage = cv2.imread("qrtest.png")
 
+
+
 def display(im, bbox):
     n = len(bbox)
     for j in range(n):
