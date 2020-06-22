@@ -37,6 +37,7 @@ while True:
     objects = cascade.detectMultiScale(gray, scaleVal, neig)
     # DISPLAY THE DETECTED OBJECTS
     for (x, y, w, h) in objects:
+
         area = w * h
         minArea = 20000
         if area > minArea:
@@ -44,10 +45,22 @@ while True:
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 3)
             cv2.putText(img, objectName, (x, y - 5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color, 2)
             roi_color = img[y:y + h, x:x + w]
+
+
+
+
+
     cv2.imshow("Result", img)
     k = cv2.waitKey(30) & 0xff
     if k == 27:
         break
+    elif k%256 == 32 and qrexist: #take screenshot
+        # SPACE pressed
+        img_name = "opencv_frame_{}.png".format(img_counter)
+        cv2.imwrite(img_name, frame[qry:qrh, qrx:qrw])
+        # cv2.imwrite(img_name, frame[170:254, 458:446])
+        print("{} written!".format(img_name))
+        img_counter += 1
 
 cap.release()
 cv2.destroyAllWindows()

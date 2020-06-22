@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import pyzbar.pyzbar as pyzbar
+#https://pysource.com/2019/02/28/scanning-qr-code-opencv-with-python/
 
 cap = cv2.VideoCapture(0)
 font = cv2.FONT_HERSHEY_PLAIN
