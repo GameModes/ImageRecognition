@@ -40,7 +40,7 @@ live_colorMenu.grid(row=5, column=1)
 ######################################
 
 def RecognizingStartFile():
-    frameWidth, frameHeight, path, cap, objectName, color = fl.defaultSettings()
+    frameWidth, frameHeight, path, camnum, objectName, color = fl.defaultSettings()
     if live_objectname_entry.get() != '':
         objectName = live_objectname_entry.get()
     if live_framewidth_entry.get() != '':
@@ -49,9 +49,13 @@ def RecognizingStartFile():
         frameHeight = int(live_frameheight_entry.get())
     if live_colorMenu.get() != '':
         color = name_to_rgb(live_colorMenu.get())
+    if live_camera_entry.get() != '':
+        if len(live_camera_entry.get()) > 4:
+            cap = 'rtsp://root:TO-41212@' + live_camera_entry.get() + '/live.sdp'
+        else:
+            cap = int(live_camera_entry.get())
 
-
-    fl.cascadeRunning(frameWidth, frameHeight, path, cap, objectName, color)
+    fl.cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color)
     # exec(open('QrRecognizingCombi.py').read())
 
 
