@@ -19,8 +19,10 @@ root = Tk()
 ######################################
 root.title('Barcode Scanner')
 root.iconbitmap('TkinterIcon.ico')
-Title = Label(root, text="Barcode Scanner", fg="blue")
-Title.grid(row=0)
+FirstSection = Label(root, text="Camera Options", fg="blue")
+FirstSection.grid(row=0)
+SecondSection = Label(root, text="Recognize Square Options", fg="blue")
+SecondSection.grid(row=4)
 #####################################
 def get_ips():
     IPs = []
@@ -34,7 +36,7 @@ def get_ips():
 Colors = ['RED', "BLUE", "GREEN", "BLACK", "YELLOW"]
 live_camera_label = Label(root, text="Camera Nummer/IP")
 live_usedIps_label = Label(root, text="Early Used Ips")
-live_objectname_label = Label(root, text="Object Naam")
+live_objectname_label = Label(root, text="Object Name")
 live_framewidth_label= Label(root, text="Frame Width")
 live_frameheight_label= Label(root, text="Frame Height")
 live_color_label = Label(root, text="Frame Color")
@@ -50,17 +52,17 @@ live_colorMenu = Combobox(root, values = Colors)
 
 live_camera_label.grid(row=1)
 live_usedIps_label.grid(row=1, column=3)
-live_objectname_label.grid(row=2)
-live_framewidth_label.grid(row=3)
-live_frameheight_label.grid(row=4)
-live_color_label.grid(row=5)
+live_objectname_label.grid(row=5)
+live_framewidth_label.grid(row=2)
+live_frameheight_label.grid(row=3)
+live_color_label.grid(row=6)
 
 live_camera_entry.grid(row=1, column=1)
 live_usedIps_entry.grid(row=1, column=4)
-live_objectname_entry.grid(row=2, column=1)
-live_framewidth_entry.grid(row=3, column=1)
-live_frameheight_entry.grid(row=4, column=1)
-live_colorMenu.grid(row=5, column=1)
+live_objectname_entry.grid(row=5, column=1)
+live_framewidth_entry.grid(row=2, column=1)
+live_frameheight_entry.grid(row=3, column=1)
+live_colorMenu.grid(row=6, column=1)
 ######################################
 
 ######################################
@@ -68,38 +70,43 @@ live_colorMenu.grid(row=5, column=1)
 
 def RecognizingStartFile():
     frameWidth, frameHeight, path, camnum, objectName, color = fl.defaultSettings()
-    if live_objectname_entry.get() != '':
-        objectName = live_objectname_entry.get()
-    if live_framewidth_entry.get() != '':
-        frameWidth = int(live_framewidth_entry.get())
-    if live_frameheight_entry.get()!= '':
-        frameHeight = int(live_frameheight_entry.get())
-    if live_colorMenu.get() != '':
-        color = name_to_rgb(live_colorMenu.get())
-    if live_usedIps_entry.get() != '':
-        if len(live_usedIps_entry.get()) > 4:
-            camnum = 'rtsp://root:TO-41212@' + live_usedIps_entry.get() + '/live.sdp'
-        else:
-            camnum = int(live_usedIps_entry.get())
-    elif live_camera_entry.get() != '':
-        if len(live_camera_entry.get()) > 4:
-            camnum = 'rtsp://root:TO-41212@' + live_camera_entry.get() + '/live.sdp'
-            if live_camera_entry.get() not in IPs:
-                IPs.append(live_camera_entry.get())
-            with open('UsedIPs.json', 'w') as IP_file:
-                json.dump(IPs, IP_file, indent=4)
+    try:
+        if live_objectname_entry.get() != '':
+            objectName = live_objectname_entry.get()
+        if live_framewidth_entry.get() != '':
+            frameWidth = int(live_framewidth_entry.get())
+        if live_frameheight_entry.get()!= '':
+            frameHeight = int(live_frameheight_entry.get())
+        if live_colorMenu.get() != '':
+            color = name_to_rgb(live_colorMenu.get())
+        if live_usedIps_entry.get() != '':
+            if len(live_usedIps_entry.get()) > 4:
+                camnum = 'rtsp://root:TO-41212@' + live_usedIps_entry.get() + '/live.sdp'
+            else:
+                camnum = int(live_usedIps_entry.get())
+        elif live_camera_entry.get() != '':
+            if len(live_camera_entry.get()) > 4:
+                camnum = 'rtsp://root:TO-41212@' + live_camera_entry.get() + '/live.sdp'
+                if live_camera_entry.get() not in IPs:
+                    IPs.append(live_camera_entry.get())
+                with open('UsedIPs.json', 'w') as IP_file:
+                    json.dump(IPs, IP_file, indent=4)
+            else:
+                camnum = int(live_camera_entry.get())
 
-        else:
-            camnum = int(live_camera_entry.get())
+
+    except ValueError:
+        print("Value must be Number, Default settings are being ran")
+
 
     fl.cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color)
     # exec(open('QrRecognizingCombi.py').read())
 
+def ErrorEntrys():
+    return
 
 start_button = Button(root, text="Start Scanning", command=RecognizingStartFile)
 start_button.grid(row=5, column=5)
-start_command_button = Button(root, text="Start Command Scanning", command=RecognizingStartFile)
-start_command_button.grid(row=6, column=5)
 
 
 
