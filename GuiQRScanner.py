@@ -23,6 +23,10 @@ FirstSection = Label(root, text="Camera Options", fg="blue")
 FirstSection.grid(row=0)
 SecondSection = Label(root, text="Recognize Square Options", fg="blue")
 SecondSection.grid(row=4)
+ThirdSection = Label(root, text="ErrorBox", fg="blue")
+ThirdSection.grid(row=4, column=3)
+FourthSection = Label(root, text="DataBase Printing (optional)", fg="blue")
+FourthSection.grid(row=8)
 #####################################
 def get_ips():
     IPs = []
@@ -36,35 +40,70 @@ def get_ips():
 Colors = ['RED', "BLUE", "GREEN", "BLACK", "YELLOW"]
 live_camera_label = Label(root, text="Camera Nummer/IP")
 live_usedIps_label = Label(root, text="Early Used Ips")
-live_objectname_label = Label(root, text="Object Name")
 live_framewidth_label= Label(root, text="Frame Width")
 live_frameheight_label= Label(root, text="Frame Height")
-live_color_label = Label(root, text="Frame Color")
-
 IPs = get_ips()
 live_camera_entry = Entry(root)
 live_usedIps_entry = Combobox(root, values = IPs)
-live_objectname_entry = Entry(root)
 live_framewidth_entry = Entry(root)
 live_frameheight_entry = Entry(root)
-live_colorMenu = Combobox(root, values = Colors)
-
-
 live_camera_label.grid(row=1)
 live_usedIps_label.grid(row=1, column=3)
-live_objectname_label.grid(row=5)
 live_framewidth_label.grid(row=2)
 live_frameheight_label.grid(row=3)
-live_color_label.grid(row=6)
-
 live_camera_entry.grid(row=1, column=1)
 live_usedIps_entry.grid(row=1, column=4)
-live_objectname_entry.grid(row=5, column=1)
 live_framewidth_entry.grid(row=2, column=1)
 live_frameheight_entry.grid(row=3, column=1)
-live_colorMenu.grid(row=6, column=1)
-######################################
 
+######################################
+live_objectname_label = Label(root, text="Object Name")
+live_color_label = Label(root, text="Frame Color")
+live_objectname_entry = Entry(root)
+live_colorMenu = Combobox(root, values = Colors)
+live_objectname_label.grid(row=5)
+live_color_label.grid(row=6)
+live_objectname_entry.grid(row=5, column=1)
+live_colorMenu.grid(row=6, column=1)
+#######################################
+live_DBdriver_label = Label(root, text="Driver:")
+live_DBdriver_label.grid(row=9)
+live_DBdriver_entry = Entry(root)
+live_DBdriver_entry.grid(row=9, column=1)
+live_DBserver_label = Label(root, text="Server:")
+live_DBserver_label.grid(row=10)
+live_DBserver_entry = Entry(root)
+live_DBserver_entry.grid(row=10, column=1)
+live_DBdatabase_label = Label(root, text="Database:")
+live_DBdatabase_label.grid(row=11)
+live_DBdatabase_entry = Entry(root)
+live_DBdatabase_entry.grid(row=11, column=1)
+live_DBuid_label = Label(root, text="UID:")
+live_DBuid_label.grid(row=12)
+live_DBuid_entry = Entry(root)
+live_DBuid_entry.grid(row=12, column=1)
+live_DBpwd_label = Label(root, text="PWD:")
+live_DBpwd_label.grid(row=13)
+live_DBpwd_entry = Entry(root)
+live_DBpwd_entry.grid(row=13, column=1)
+live_DBselect_label = Label(root, text="SELECT:")
+live_DBselect_label.grid(row=14)
+live_DBselect_entry = Entry(root)
+live_DBselect_entry.grid(row=14, column=1)
+live_DBfrom_label = Label(root, text="FROM:")
+live_DBfrom_label.grid(row=15)
+live_DBfrom_entry = Entry(root)
+live_DBfrom_entry.grid(row=15, column=1)
+live_DBsection_label = Label(root, text="SECTION:")
+live_DBsection_label.grid(row=16)
+live_DBsection_entry = Entry(root)
+live_DBsection_entry.grid(row=16, column=1)
+
+live_usedIps_label = Label(root, text="Early Used Ips")
+live_usedIps_entry = Combobox(root, values = IPs)
+live_usedIps_label.grid(row=9, column=3)
+IPs = get_ips()
+live_usedIps_entry.grid(row=9, column=4)
 ######################################
 
 
@@ -96,14 +135,19 @@ def RecognizingStartFile():
 
 
     except ValueError:
-        print("Value must be Number, Default settings are being ran")
-
+        CameraError = False
+        ErrorEntrys(CameraError)
 
     fl.cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color)
     # exec(open('QrRecognizingCombi.py').read())
 
-def ErrorEntrys():
-    return
+def ErrorEntrys(CameraError):
+    if CameraError:
+        live_answerbox_label = Label(root, text="Camera is not Connectable")
+        live_answerbox_label.grid(row=5, column=3)
+    else:
+        live_answerbox_label = Label(root, text="Value must be Number")
+        live_answerbox_label.grid(row=5, column=3)
 
 start_button = Button(root, text="Start Scanning", command=RecognizingStartFile)
 start_button.grid(row=5, column=5)
