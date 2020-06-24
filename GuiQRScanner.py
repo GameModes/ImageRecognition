@@ -36,6 +36,14 @@ def get_ips():
         IPs.append(IP)
     return IPs
 
+def get_databases():
+    Databases = []
+    Databasefile_Opener = open('UsedDatabases.json')
+    DataBaseData = json.load(Databasefile_Opener)
+    for Database in DataBaseData:
+        Databases.append(Database)
+    return Databases
+
 ######################################
 Colors = ['RED', "BLUE", "GREEN", "BLACK", "YELLOW"]
 live_camera_label = Label(root, text="Camera Nummer/IP")
@@ -99,15 +107,21 @@ live_DBsection_label.grid(row=16)
 live_DBsection_entry = Entry(root)
 live_DBsection_entry.grid(row=16, column=1)
 
-live_usedIps_label = Label(root, text="Early Used Ips")
-live_usedIps_entry = Combobox(root, values = IPs)
-live_usedIps_label.grid(row=9, column=3)
-IPs = get_ips()
-live_usedIps_entry.grid(row=9, column=4)
+#~
+# live_usedDatabases_label = Label(root, text="Early Used Databases")
+# Databases = get_databases()
+# live_usedDatabases_entry = Combobox(root, values = Databases)
+# live_usedDatabases_label.grid(row=9, column=3)
+# live_usedDatabases_entry.grid(row=9, column=4)
+#~
 ######################################
 
 
 def RecognizingStartFile():
+    connectie = ''
+    execute = ''
+    insert = ''
+    databaseUse = False
     frameWidth, frameHeight, path, camnum, objectName, color = fl.defaultSettings()
     try:
         if live_objectname_entry.get() != '':
@@ -132,14 +146,19 @@ def RecognizingStartFile():
                     json.dump(IPs, IP_file, indent=4)
             else:
                 camnum = int(live_camera_entry.get())
-
-
+        if live_DBdriver_entry.get() != '' and live_DBserver_entry.get() != '' and live_DBuid_entry.get() != '' and live_DBpwd_entry.get() != '' and live_DBselect_entry.get() != '' and live_DBfrom_entry.get() != '' and live_DBsection_entry.get() != '' and live_DBdatabase_entry.get() != '' :
+            databaseUse = True
+            connectie = 'Driver=' + live_DBdriver_entry.get() + ';'+'Server=' + live_DBserver_entry.get() + ';'+'Database=' + live_DBdatabase_entry.get() +';' +'UID=' + live_DBuid_entry.get() + ';' + 'PWD=' + live_DBpwd_entry.get() + ';'
+            execute = 'SELECT' + live_DBselect_entry.get() + 'FROM' + live_DBfrom_entry.get()
+            insert = '''INSERT INTO ''' + live_DBfrom_entry.get() + ''' (''' + live_DBsection_entry.get() + ''')'''
+            connectielist = [connectie, execute, insert]
+            with open('UsedDatabases.json', 'w') as IP_file:
+                json.dump(IPs, IP_file, indent=4)
     except ValueError:
         CameraError = False
         ErrorEntrys(CameraError)
 
-    fl.cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color)
-    # exec(open('QrRecognizingCombi.py').read())
+    fl.cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color, databaseUse, connectie, execute, insert)
 
 def ErrorEntrys(CameraError):
     if CameraError:
@@ -150,7 +169,7 @@ def ErrorEntrys(CameraError):
         live_answerbox_label.grid(row=5, column=3)
 
 start_button = Button(root, text="Start Scanning", command=RecognizingStartFile)
-start_button.grid(row=5, column=5)
+start_button.grid(row=6, column=5)
 
 
 

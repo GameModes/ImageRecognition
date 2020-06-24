@@ -1,7 +1,7 @@
 import cv2
-import numpy as np
 import pyzbar.pyzbar as pyzbar
 from webcolors import *
+import pyodbc
 
 
 
@@ -19,7 +19,21 @@ def defaultSettings():
 def notneeded(a):
     pass
 
-def cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color):
+
+def databaseUsing(connectie, execute, insert, barcode):
+    conn = pyodbc.connect(connectie)
+    cursor = conn.cursor()
+    cursor.execute(execute)
+    #~
+    cursor.execute('''IF NOT EXISTS (SELECT 1 FROM QRDatabase
+    WHERE QRCode = ''' + str(barcode) + ''')''' +
+    '''BEGIN''' + insert + '''VALUES (''' + barcode + ''') END''')
+    #~
+    conn.commit()
+    pass
+
+
+def cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color, databaseUse, connectie, execute, insert):
 
     cap = cv2.VideoCapture(camnum)
     cap.set(3, frameWidth)
@@ -42,7 +56,10 @@ def cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color):
                     cv2.putText(img, objectName, (x, y - 5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color, 2)
             decodedObjects = pyzbar.decode(img)
             for obj in decodedObjects:
-                print("Data", obj.data)
+                barcode = obj.data
+                if databaseUse:
+                    databaseUsing(connectie, execute, insert, barcode)
+                print("Data", barcode)
 
             if qrcodefound == False:
                 cv2.imshow("Result", img)
