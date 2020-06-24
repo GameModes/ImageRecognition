@@ -3,6 +3,8 @@ import numpy as np
 import pyzbar.pyzbar as pyzbar
 from webcolors import *
 
+
+
 def defaultSettings():
     path = 'cascade70N20S.xml'  # PATH OF THE CASCADE
     objectName = 'QR'  # OBJECT NAME TO DISPLAY #{aanpasbaar}
@@ -11,7 +13,6 @@ def defaultSettings():
     color = name_to_rgb('GREEN') #{aanpasbaar}
 
     camnum = 0 #Camera nummer of IP {aanpasbaar}
-    # cap = cv2.VideoCapture('rtsp://root:TO-41212@169.254.216.136/live.sdp')
     return frameWidth, frameHeight, path, camnum, objectName, color
 
 
@@ -39,10 +40,6 @@ def cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color):
                 if area > minArea: #If object has correct size
                     cv2.rectangle(img, (x, y), (x + w, y + h), color, 3) #create rectangle
                     cv2.putText(img, objectName, (x, y - 5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color, 2)
-                    roi_color = img[y:y + h, x:x + w]
-                    # qrcodefound = True
-                    # cropped = img[y:y + h, x:x + w, + h]
-                    # cv2.imshow("cropped", cropped)
             decodedObjects = pyzbar.decode(img)
             for obj in decodedObjects:
                 print("Data", obj.data)
@@ -57,6 +54,3 @@ def cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color):
 
     cap.release()
     cv2.destroyAllWindows()
-
-# frameWidth, frameHeight, path, cap, objectName, color = defaultSettings()
-# cascadeRunning(frameWidth, frameHeight, path, cap, objectName, color)
