@@ -29,6 +29,10 @@ def databaseUsing(connectie, execute, insert, barcode): #database connnection fu
     conn.commit()
     pass
 
+def createRectangle(img, x, y, w, h, color, objectName):
+    cv2.rectangle(img, (x, y), (x + w, y + h), color, 3)  # create rectangle
+    cv2.putText(img, objectName, (x, y - 5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color, 2)
+
 
 def cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color, databaseUse, connectie, execute, insert):
     cap = cv2.VideoCapture(camnum) #activates camera
@@ -48,8 +52,7 @@ def cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color, dat
                 area = w * h
                 minArea = 20000
                 if area > minArea: #If object has correct size
-                    cv2.rectangle(img, (x, y), (x + w, y + h), color, 3) #create rectangle
-                    cv2.putText(img, objectName, (x, y - 5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color, 2)
+                    createRectangle(img, x, y, w, h, color, objectName)
             decodedObjects = pyzbar.decode(img) #decodes barcodes out video
             for obj in decodedObjects: #every barcodes it finds
                 barcode = obj.data #place it in a variable
