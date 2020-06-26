@@ -1,6 +1,3 @@
-<a href="http://fvcproductions.com"><img src="https://cdn-reichelt.de/bilder/web/xxl_ws/EB00/DELOCK_90279_01 title="FVCproductions" alt="FVCproductions"></a>
-
-<!-- [![FVCproductions](https://cdn-reichelt.de/bilder/web/xxl_ws/EB00/DELOCK_90279_01)](http://fvcproductions.com) -->
-
+<a href="http://fvcproductions.com"><img src="https://avatars1.githubusercontent.com/u/4284691?v=3&s=200" title="FVCproductions" alt="FVCproductions"></a>
 # ImageRecognition
 
