@@ -6,7 +6,7 @@ import pyodbc  # database connection
 
 def defaultSettings() -> object:
     """
-
+    Gives certain variables a value in case they aren't manually changed
     :rtype: object
     :return:
     """
@@ -19,12 +19,18 @@ def defaultSettings() -> object:
     return frame_width, frame_height, path, camnum, object_name, color
 
 
-def notneeded(a):  # notneeded functie if neeed
+def notneeded(a):
+    """
+    Incase of empty/not used variabele still need to have a function/value
+    :param a:
+    :return:
+    """
     pass
 
 
 def databaseUsing(connectie, execute, insert, barcode, database_name, section_name):  # database connnection function
     """
+    Makes it possible to connect to a database with the manually used values
     :rtype: object
     :param connectie: connectie code
     :param execute: execution code
@@ -45,6 +51,7 @@ def databaseUsing(connectie, execute, insert, barcode, database_name, section_na
 
 def createRectangle(img, x, y, w, h, color, object_name):
     """
+    Makes a rectangle with certain coordinates
     :rtype: object
     :param img: photo information
     :param x: coordinate
@@ -60,7 +67,11 @@ def createRectangle(img, x, y, w, h, color, object_name):
 
 def cascadeRunning(frame_width, frame_height, path, camnum, objectName, color, databaseUse, connectie, execute, insert, database_name, section_name):
     """
-
+    Gives connection to (web)cam,
+    checks if code is found,
+    ask which entries are filled,
+    uses functions for certain used entries,
+    closes connection with (web)cam if esc pressed
     :rtype: object
     :param frame_width: frame width
     :param frame_height: frame height
