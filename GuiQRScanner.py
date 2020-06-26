@@ -6,15 +6,7 @@ import QrRecognizingCombi as fl #Able to make use of other file
 
 root = Tk() #start of tkinter
 ###########################################
-#https://datatofish.com/entry-box-tkinter/
-#https://stackoverflow.com/questions/28905984/tkinter-how-to-create-choice-box
-#https://pypi.org/project/webcolors/1.3/
-#https://www.delftstack.com/nl/howto/python-tkinter/how-to-set-window-icon-in-tkinter/
-#https://www.youtube.com/watch?v=lt78_05hHSk
-#https://stackoverflow.com/questions/2395431/using-tkinter-in-python-to-edit-the-title-bar
-#https://thispointer.com/python-how-to-check-if-an-item-exists-in-list-search-by-value-or-condition/
-#https://datatofish.com/insert-sql-server-python/
-#https://stackoverflow.com/questions/4253960/sql-how-to-properly-check-if-a-record-exists
+
 ######################################
 root.title('Barcode Scanner') #title
 root.iconbitmap('TkinterIcon.ico') #title Picture
