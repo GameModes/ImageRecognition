@@ -110,13 +110,13 @@ live_DBsection_label.grid(row=16)
 live_DBsection_entry = Entry(root)
 live_DBsection_entry.grid(row=16, column=1)
 
-#~
-# live_usedDatabases_label = Label(root, text="Early Used Databases")
-# Databases = get_databases()
-# live_usedDatabases_entry = Combobox(root, values = Databases)
-# live_usedDatabases_label.grid(row=9, column=3)
-# live_usedDatabases_entry.grid(row=9, column=4)
-#~
+
+live_usedDatabases_label = Label(root, text="Early Used Databases")
+Databases = get_databases()
+live_usedDatabases_entry = Combobox(root, values = Databases)
+live_usedDatabases_label.grid(row=9, column=3)
+live_usedDatabases_entry.grid(row=9, column=4)
+
 ######################################
 
 def RecognizingStartFile():
@@ -149,21 +149,30 @@ def RecognizingStartFile():
                     json.dump(IPs, IP_file, indent=4) #dump the IP list in Json file
             else:
                 camnum = int(live_camera_entry.get())
-        if live_DBdriver_entry.get() != '' and live_DBserver_entry.get() != '' and live_DBuid_entry.get() != '' and live_DBpwd_entry.get() != '' and live_DBselect_entry.get() != '' and live_DBfrom_entry.get() != '' and live_DBsection_entry.get() != '' and live_DBdatabase_entry.get() != '' :
+        if live_usedDatabases_entry.get() != '':
+            databaseUse = True
+            connectie = live_usedDatabases_entry.get()[0]
+            execute = live_usedDatabases_entry.get()[1]
+            insert = live_usedDatabases_entry.get()[2]
+            database_name = live_usedDatabases_entry.get()[3]
+            section_name = live_usedDatabases_entry.get()[4]
+        elif live_DBdriver_entry.get() != '' and live_DBserver_entry.get() != '' and live_DBuid_entry.get() != '' and live_DBpwd_entry.get() != '' and live_DBselect_entry.get() != '' and live_DBfrom_entry.get() != '' and live_DBsection_entry.get() != '' and live_DBdatabase_entry.get() != '' :
             #check if all the database insert slots are filled
             databaseUse = True
             connectie = 'Driver=' + live_DBdriver_entry.get() + ';'+'Server=' + live_DBserver_entry.get() + ';'+'Database=' + live_DBdatabase_entry.get() +';' +'UID=' + live_DBuid_entry.get() + ';' + 'PWD=' + live_DBpwd_entry.get() + ';'
             execute = 'SELECT' + live_DBselect_entry.get() + 'FROM' + live_DBfrom_entry.get()
             insert = '''INSERT INTO ''' + live_DBfrom_entry.get() + ''' (''' + live_DBsection_entry.get() + ''')'''
-            connectielist = [connectie, execute, insert]
-            with open('UsedDatabases.json', 'w') as IP_file:
-                json.dump(IPs, IP_file, indent=4)
+            database_name = live_DBfrom_entry.get()
+            section_name = live_DBsection_entry.get()
+            connectielist = (connectie, execute, insert, database_name, section_name)
+            with open('UsedDatabases.json', 'a+') as IP_file:
+                json.dump(connectielist, IP_file, indent=4)
         else:
             print("database not used or filled entirely")
     except ValueError: #if not filled in correctly
         ErrorEntrys(CameraError)
 
-    fl.cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color, databaseUse, connectie, execute, insert)
+    fl.cascadeRunning(frameWidth, frameHeight, path, camnum, objectName, color, databaseUse, connectie, execute, insert, database_name, section_name)
     #run with the current made settings
 
 def ErrorEntrys(CameraError): #ErrorBox gives correct errorcode

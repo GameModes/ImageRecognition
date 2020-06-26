@@ -23,7 +23,7 @@ def notneeded(a):  # notneeded functie if neeed
     pass
 
 
-def databaseUsing(connectie, execute, insert, barcode):  # database connnection function
+def databaseUsing(connectie, execute, insert, barcode, database_name, section_name):  # database connnection function
     """
     :rtype: object
     :param connectie: connectie code
@@ -35,9 +35,9 @@ def databaseUsing(connectie, execute, insert, barcode):  # database connnection 
     cursor = conn.cursor()  # get cursor
     cursor.execute(execute)  # execute first command
     # ~
-    cursor.execute('''IF NOT EXISTS (SELECT 1 FROM QRDatabase
-    WHERE QRCode = ''' + str(barcode) + ''')''' +
-                   '''BEGIN''' + insert + '''VALUES (''' + barcode + ''') END''')
+    cursor.execute('''IF NOT EXISTS 
+    (SELECT 1 FROM ''' + database_name + '''WHERE''' + section_name + ''' = ''' + str(barcode) + ''') 
+    BEGIN''' + insert + '''VALUES (''' + barcode + ''') END''')
     # ~ Execute second command
     conn.commit()
     pass
@@ -58,7 +58,7 @@ def createRectangle(img, x, y, w, h, color, object_name):
     cv2.putText(img, object_name, (x, y - 5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color, 2)
 
 
-def cascadeRunning(frame_width, frame_height, path, camnum, objectName, color, databaseUse, connectie, execute, insert):
+def cascadeRunning(frame_width, frame_height, path, camnum, objectName, color, databaseUse, connectie, execute, insert, database_name, section_name):
     """
 
     :rtype: object
@@ -77,8 +77,7 @@ def cascadeRunning(frame_width, frame_height, path, camnum, objectName, color, d
     cap.set(3, frame_width)
     cap.set(4, frame_height)
     qrcodefound = False  # default on False
-    cv2.namedWindow("Camera")
-    cv2.resizeWindow("Camera", frame_width, frame_height + 100)
+    cv2.resizeWindow("Result", frame_width, frame_height + 100)
     cascade = cv2.CascadeClassifier(path)
     try:
         while True:
@@ -95,10 +94,10 @@ def cascadeRunning(frame_width, frame_height, path, camnum, objectName, color, d
             for obj in decodedObjects:  # every barcodes it finds
                 barcode = obj.data  # place it in a variable
                 if databaseUse:  # if databaseUse is true
-                    databaseUsing(connectie, execute, insert, barcode)  # use function datbase Using
+                    databaseUsing(connectie, execute, insert, barcode, database_name, section_name)  # use function datbase Using
                 print("Data", barcode)  # print it in console
             if qrcodefound == False:
-                cv2.imshow("Result", img)
+                cv2.imshow("Camera", img)
             k = cv2.waitKey(30) & 0xff  # wait until key pressed
             if k == 27:  # if ESC break loop
                 break
