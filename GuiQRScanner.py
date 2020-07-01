@@ -123,6 +123,8 @@ def RecognizingStartFile():
     connectie = ''
     execute = ''
     insert = ''
+    database_name = ''
+    section_name = ''
     databaseUse = False #default is not used
     CameraError = False #default if not changed
     frameWidth, frameHeight, path, camnum, objectName, color = fl.defaultSettings() #if not inserted, this data will be used
