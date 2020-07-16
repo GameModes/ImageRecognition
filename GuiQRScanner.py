@@ -28,12 +28,13 @@ def get_ips():
     return IPs
 
 def get_databases():
-    Databases = []
-    Databasefile_Opener = open('UsedDatabases.json')
-    DataBaseData = json.load(Databasefile_Opener)
-    for Database in DataBaseData:
-        Databases.append(Database)
-    return Databases
+    # Databases = []
+    # Databasefile_Opener = open('UsedDatabases.json')
+    # DataBaseData = json.load(Databasefile_Opener)
+    # for Database in DataBaseData:
+    #     Databases.append(Database)
+    # return Databases
+    return None
 
 ###################################### First Section
 Colors = ['RED', "BLUE", "GREEN", "BLACK", "YELLOW"] #frame colors list

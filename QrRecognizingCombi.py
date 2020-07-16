@@ -39,11 +39,18 @@ def databaseUsing(connectie, execute, insert, barcode, database_name, section_na
     """
     conn = pyodbc.connect(connectie)  # connection with database
     cursor = conn.cursor()  # get cursor
-    cursor.execute(execute)  # execute first command
+    # execute first command
     # ~
+    barcodenumber = str(barcode, 'utf-8')
+    # print('''IF NOT EXISTS
+    # (SELECT 1 FROM ''' + database_name + ''' WHERE ''' + section_name + ''' = ' ''' + barcodenumber + '''')
+    #
+    # BEGIN ''' + insert + ''' VALUES ('0'''+ barcodenumber + '''' ) END''')
+
     cursor.execute('''IF NOT EXISTS 
-    (SELECT 1 FROM ''' + database_name + '''WHERE''' + section_name + ''' = ''' + str(barcode) + ''') 
-    BEGIN''' + insert + '''VALUES (''' + barcode + ''') END''')
+    (SELECT 1 FROM ''' + database_name + ''' WHERE ''' + section_name + ''' = '0''' + barcodenumber + '''') 
+    
+    BEGIN ''' + insert + ''' VALUES ('0'''+ barcodenumber + '''') END''')
     # ~ Execute second command
     conn.commit()
     pass
